@@ -23,5 +23,5 @@ The Blogs and the Posts remain, but not the list of posts in a blog.
 
 Here is an image of the uwp version working. The comboBox ItemsSource bound to bloggingContext.Blogs selects the blog, the ListView ItemsSource is bound to the Selected of the ComboBox displays the posts in that Blog. 
 
-![Ef Blogging Cb Lv As It Should Be](../../../../Pictures/EfBloggingCbLvAsItShouldBe.JPG)
+![Ef Blogging Cb Lv As It Should Be](GitHubStuff/EfBloggingCbLvAsItShouldBe.JPG)
 
