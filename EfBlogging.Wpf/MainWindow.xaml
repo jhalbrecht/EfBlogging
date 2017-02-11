@@ -1,0 +1,85 @@
+﻿<Window x:Class="EfBlogging.Wpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ignore="http://www.galasoft.ch/ignore"
+        mc:Ignorable="d ignore"
+        Height="600"
+        Width="600"
+        Title="MVVM Light Application"
+        DataContext="{Binding Main, Source={StaticResource Locator}}">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Skins/MainSkin.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="5"  x:Name="LayoutRoot">
+
+        <!--<TextBlock FontSize="36"
+                   FontWeight="Bold"
+                   Foreground="Purple"
+                   Text="{Binding WelcomeTitle}"
+                   VerticalAlignment="Center"
+                   HorizontalAlignment="Center"
+                   TextWrapping="Wrap" />-->
+
+        <StackPanel Margin="5" x:Name="SpBlogAndPost">
+            <Button x:Name="BtnDoSomething"
+                    Content="Press me"
+                    Command="{Binding PressMeCommand}"></Button>
+            <TextBlock Text="Select Blog to read" />
+
+            <ComboBox x:Name="CbBlogs"
+                      ItemsSource="{Binding Blogs}"
+                      SelectedItem="{Binding SelectedBlog}"
+                      Background="AntiqueWhite">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+
+            </ComboBox>
+            <TextBlock Text="View posts in selected blog" />
+            <ListView x:Name="LvBlogs"
+                      ItemsSource="{Binding SelectedBlog.Posts}"
+                      Background="Beige"
+                      HorizontalContentAlignment="Stretch"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="Padding"
+                                    Value="0" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                <ListView.ItemTemplate>
+
+                    <DataTemplate>
+                        <StackPanel x:Name="RpPlayItems" Orientation="Vertical">
+
+                            <TextBlock x:Name="TbSfxNme"
+                                       MinWidth="222"
+                                       Background="LightSlateGray"
+                                       Text="{Binding Title}" />
+                            <TextBlock x:Name="TbContent"
+                                       MinWidth="222" TextWrapping="Wrap"
+                                       Text="{Binding Content}" />
+
+                        </StackPanel>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+
+            </ListView>
+        </StackPanel>
+
+
+
+    </Grid>
+</Window>
