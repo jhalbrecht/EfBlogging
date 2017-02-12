@@ -8,9 +8,9 @@ A solution with two projects demonstrating several features and adins that I fre
 ## Impetus
 Impetus for creating this project was attempting to implement sqlite in my updating of win8.0 TheLolFx in the store to uwp The implementation I created didn't act as I believed it should
 
-I've used sql and entityframework (ef) a few times. It had been awhile. 
+I've used sql and entity framework (ef) a few times. It had been awhile. 
 hence my implementing the Blog / Post classes of [this](https://docs.microsoft.com/en-us/ef/core/get-started/uwp/getting-started) article "UWP - New Database" for adding core.sqlite to uwp. 
-So I would be working on a know good implementation. In fact the classes are in the wpf project and linked (not coppied) to the uwp project. 
+So I would be working on a know good implementation. In fact the classes are in the wpf project and linked (not copied) to the uwp project. 
 No chance of my fat fingers making a syntax error as I stare at the screen after hours of scratching my head at the seemingly odd behavior of ef SaveChanges()
 
 ## Tools used in projects
