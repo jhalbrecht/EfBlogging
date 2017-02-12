@@ -1,6 +1,6 @@
 # EfBlogging
 
-A solution with two projects demonstrating several features and adins that I frequently use in application development.
+A solution with two projects demonstrating several features and Adins that I frequently use in application development.
 
 ##### End goal  for  projects
 ![Ef Blogging Cb Lv As It Should Be](GitHubStuff/EfBloggingCbLvAsItShouldBe.JPG)
