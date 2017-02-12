@@ -23,6 +23,7 @@ Also demonstrates an inconsistency between ef sqlite and ef localDb
 * EfBlogging.Uwp - ef and core.sqlite
 
 ## The problem
+I [created an issue](https://github.com/jhalbrecht/EfBlogging/issues/1) in this repository
 It works great in the wpf LocalDB implementation, 
 however in the uwp solution the **dbContext SaveChanges() doesn't appear to persist the List of posts in the Blogs after the dataContext is released.**
 The Blogs and the Posts remain, but not the list of posts in a blog.
