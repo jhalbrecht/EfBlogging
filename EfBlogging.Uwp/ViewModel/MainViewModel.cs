@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -15,6 +16,7 @@ using EfBlogging.Uwp.Model;
 using EfBlogging.Wpf.Model;
 using Microsoft.EntityFrameworkCore;
 using Remotion.Linq.Clauses;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 // some classes linked (not copied) here, hence this using statement
 
@@ -30,6 +32,7 @@ namespace EfBlogging.Uwp.ViewModel
         private string _clock = "Starting...";
         private int _counter;
         private RelayCommand _incrementCommand;
+        private RelayCommand _AddBlogCommand;
         private RelayCommand<string> _navigateCommand;
         private string _originalTitle;
         private bool _runClock;
@@ -66,27 +69,25 @@ namespace EfBlogging.Uwp.ViewModel
 
         private void FakeEmUp()
         {
-            var fakeBlogs = FakeBlog.Generator.Generate(4).ToList();
-            var c = fakeBlogs.ToList();
             int saveChangesResult = 0;
             try
             {
+                var fakeBlogs = FakeBlog.Generator.Generate(4).ToList();
                 foreach (var fakeBlog in fakeBlogs)
                 {
-                    var foo = bloggingContext.Blogs.Add(fakeBlog);
-                    Logger.Log(this, $"foo state added: {foo.State}");
+                    var blogsAddResult = bloggingContext.Blogs.Add(fakeBlog);
+                    Logger.Log(this, $"blogsAddResult: {blogsAddResult}");
+                    Logger.Log($"fakeBlog.BlogId {fakeBlog.BlogId} fakeBlog.Posts.Count {fakeBlog.Posts.Count()}");
+                    LogChangeTrackerEntities("In the foreach", bloggingContext.ChangeTracker);
                 }
-                var peas = bloggingContext.Posts;
-                //bloggingContext.Entry(peas).State = EntityState.Modified;
-                //bloggingContext.Entry(peas).State = EntityState.Added;
-                //bloggingContext.Entry(peas.Entity).CurrentValues.SetValues(peas);
 
                 saveChangesResult = bloggingContext.SaveChanges();
                 Logger.Log("FakeEmUp()", $"saveChangesResult: {saveChangesResult}");
+                LogChangeTrackerEntities("Just after SaveChanges()", bloggingContext.ChangeTracker);
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                Logger.Log(this, $"Exception: {e}");
             }
 
             var b = bloggingContext.Blogs.Count();
@@ -106,6 +107,49 @@ namespace EfBlogging.Uwp.ViewModel
             var againwellAreTheseTheListOfPosts = bloggingContext.Blogs.FirstOrDefault().Posts;
             Logger.Log(this, $"In FakeEm() is the list of posts still in the blog? ({againwellAreTheseTheListOfPosts?.Count})");
             Logger.Log($"Blogs: {bloggingContext.Blogs.Count()} Posts: {bloggingContext.Posts.Count()}");
+            LogChangeTrackerEntities("That's all folks", bloggingContext.ChangeTracker);
+        }
+
+        private static void LogChangeTrackerEntities(string from, ChangeTracker changeTracker)
+        {
+            var entries = changeTracker.Entries();
+            foreach (var entry in entries)
+            {
+                Logger.Log($"From: {from} Entity Name: {entry.Entity.GetType().FullName} Status: {entry.State}");
+            }
+        }
+
+        public RelayCommand AddBlogCommand
+        {
+            get
+            {
+                return _AddBlogCommand
+                    ?? (_AddBlogCommand = new RelayCommand(
+                    () =>
+                    {
+                        Logger.Log(this, $"add blog command");
+                        Abc();
+                    }));
+            }
+        }
+
+        private void Abc()
+        {
+            //var blog = FakeBlog.Generator.Generate(1);
+            //var foo = bloggingContext.Blogs;
+
+            var blog = new Blog()
+            {
+                Name = "jeffAdding",
+                Posts = new List<Post> {new Post
+                { Title = "jeffAdding", Content = "jeff is adding a blog with one post"}
+            }
+            };
+
+
+            bloggingContext.Blogs.Add(blog);
+            var rsp = bloggingContext.SaveChanges();
+            Logger.Log(this, $"SaveCommand() rsp: {rsp}");
         }
 
         public string Clock

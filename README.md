@@ -2,6 +2,9 @@
 
 A solution with two projects demonstrating several features and Adins that I frequently use in application development.
 
+* EfBlogging.Wpf - ef and LocalDB
+* EfBlogging.Uwp - ef and core.sqlite
+
 ##### End goal  for  projects
 ![Ef Blogging Cb Lv As It Should Be](GitHubStuff/EfBloggingCbLvAsItShouldBe.JPG)
 
@@ -18,9 +21,15 @@ No chance of my fat fingers making a syntax error as I stare at the screen after
 * [PropertyChanged.Fody](https://github.com/Fody/PropertyChanged) - implements INotifyPropertyChanged at compile 
 * [MvvmLight Toolkit](http://www.mvvmlight.net/)
 
-Also demonstrates an inconsistency between ef sqlite and ef localDb
-* EfBlogging.Wpf - ef and LocalDB
-* EfBlogging.Uwp - ef and core.sqlite
+## Reading resources
+* [Entity Framework Add and Attach and Entity States](https://msdn.microsoft.com/en-us/library/jj592676%28v=vs.113%29.aspx?f=255&MSPPError=-2147217396)
+
+
+
+## Other
+
+This project also demonstrates an inconsistency ?Bug?? between ef sqlite and ef localDb
+
 
 ## The problem
 I [created an issue](https://github.com/jhalbrecht/EfBlogging/issues/1) in this repository

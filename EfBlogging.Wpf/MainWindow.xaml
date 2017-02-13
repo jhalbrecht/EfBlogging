@@ -18,7 +18,8 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Grid Margin="5"  x:Name="LayoutRoot">
+    <Grid Margin="5"
+          x:Name="LayoutRoot">
 
         <!--<TextBlock FontSize="36"
                    FontWeight="Bold"
@@ -27,30 +28,38 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap" />-->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            
+            <StackPanel Margin="5"
+                        x:Name="SpBlogAndPost">
+                <Button x:Name="BtnDoSomething"
+                        Content="Press me"
+                        Command="{Binding PressMeCommand}"></Button>
+                <TextBlock Text="Select Blog to read" />
 
-        <StackPanel Margin="5" x:Name="SpBlogAndPost">
-            <Button x:Name="BtnDoSomething"
-                    Content="Press me"
-                    Command="{Binding PressMeCommand}"></Button>
-            <TextBlock Text="Select Blog to read" />
-
-            <ComboBox x:Name="CbBlogs"
-                      ItemsSource="{Binding Blogs}"
-                      SelectedItem="{Binding SelectedBlog}"
-                      Background="AntiqueWhite">
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding Name}" />
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-
-            </ComboBox>
-            <TextBlock Text="View posts in selected blog" />
-            <ListView x:Name="LvBlogs"
-                      ItemsSource="{Binding SelectedBlog.Posts}"
-                      Background="Beige"
-                      HorizontalContentAlignment="Stretch"
-                      ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                <ComboBox x:Name="CbBlogs"
+                          ItemsSource="{Binding Blogs}"
+                          SelectedItem="{Binding SelectedBlog}"
+                          Background="AntiqueWhite">
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name}" />
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+                
+                <TextBlock Text="View posts in selected blog" />
+                <ListView x:Name="LvBlogs"
+                          ItemsSource="{Binding SelectedBlog.Posts}"
+                          SelectedItem="{Binding SelectedPost, Mode=TwoWay}"
+                          
+                          Background="Beige"
+                          HorizontalContentAlignment="Stretch"
+                          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                     <ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="HorizontalContentAlignment"
@@ -59,27 +68,51 @@
                                     Value="0" />
                         </Style>
                     </ListView.ItemContainerStyle>
-                <ListView.ItemTemplate>
+                    <ListView.ItemTemplate>
 
-                    <DataTemplate>
-                        <StackPanel x:Name="RpPlayItems" Orientation="Vertical">
+                        <DataTemplate>
+                            <StackPanel x:Name="RpPlayItems"
+                                        Orientation="Vertical">
 
-                            <TextBlock x:Name="TbSfxNme"
-                                       MinWidth="222"
-                                       Background="LightSlateGray"
-                                       Text="{Binding Title}" />
-                            <TextBlock x:Name="TbContent"
-                                       MinWidth="222" TextWrapping="Wrap"
-                                       Text="{Binding Content}" />
+                                <TextBlock x:Name="TbSfxNme"
+                                           MinWidth="222"
+                                           Background="LightSlateGray"
+                                           Text="{Binding Title}" />
+                                <TextBlock x:Name="TbContent"
+                                           MinWidth="222"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding Content}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>
 
-                        </StackPanel>
-                    </DataTemplate>
-                </ListView.ItemTemplate>
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Blog Post Detail"
+                           FontSize="24" />
 
-            </ListView>
-        </StackPanel>
+                <ListView x:Name="LvPostDetail"
+                          ItemsSource="{Binding SelectedPost}"
+                          >
+                    <ListView.ItemTemplate>
 
+                        <DataTemplate>
+                            <StackPanel x:Name="SpContent"
+                                        Orientation="Vertical">
 
+                                <TextBlock x:Name="TbContent"
+                                           MinWidth="222"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding Content}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
 
+                </ListView>
+
+            </StackPanel>
+
+        </Grid>
     </Grid>
 </Window>

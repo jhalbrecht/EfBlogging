@@ -13,11 +13,20 @@ namespace EfBlogging.Uwp.Model
         public DbSet<Blog> Blogs { get; set; }
         public DbSet<Post> Posts { get; set; }
 
+        //public override int SaveChanges()
+        //{
+        //    foreach (var dbEntityEntry in ChangeTracker.Entries<AbstractModel>())
+        //    {
+        //        dbEntityEntry.Entity.UpdateDates();
+        //    }
+        //    return base.SaveChanges();
+        //}
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // 6d2da4e8-a126-4b00-ae05-dfefadaddf2d
             // 6d2da4e8-a126-4b00-ae05-dfefadaddf2d_1.0.0.0_x86__brppa21vfw7f4
-            optionsBuilder.UseSqlite("Filename=Blogging.db");
+            optionsBuilder.UseSqlite("Filename=UwpBlogging.db");
         }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

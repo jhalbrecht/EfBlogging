@@ -62,7 +62,7 @@ namespace EfBlogging.Wpf.ViewModel
             bloggingContext = new BloggingContext();
             PressMeCommand = new RelayCommand(() => DoPressMeCommand(), canExecute: () => Please());
 
-            // InitialSetup(); // seed the db with fake data by bogus
+            //InitialSetup(); // seed the db with fake data by bogus
             Setup();
         }
 
@@ -96,7 +96,7 @@ namespace EfBlogging.Wpf.ViewModel
                 {
                     db.Blogs.Add(blog);
                 }
-                db.SaveChanges();
+                var result = db.SaveChanges();
                 Blogs = new ObservableCollection<Blog>(db.Blogs);
             }
         }
@@ -105,6 +105,7 @@ namespace EfBlogging.Wpf.ViewModel
         public ObservableCollection<Blog> Blogs { get; set; }
         public ObservableCollection<Post> Posts { get; set; }
         public Blog SelectedBlog { get; set; }
+        public Post SelectedPost { get; set; }   
 
         public RelayCommand PressMeCommand { get; set; }
 
