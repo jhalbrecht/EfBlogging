@@ -40,7 +40,7 @@ namespace EfBlogging.Uwp.ViewModel
         private RelayCommand _showDialogCommand;
         private string _welcomeTitle = string.Empty;
         private BloggingContext bloggingContext;
-        // public BloggingContext EfBloggingContext { get; set; } = new BloggingContext();
+        public BloggingContext EfBloggingContext { get; set; } = new BloggingContext();
 
         public MainViewModel(IDataService dataService, INavigationService navigationService)
         {
@@ -48,31 +48,31 @@ namespace EfBlogging.Uwp.ViewModel
             _navigationService = navigationService;
             Initialize();
             bloggingContext = new BloggingContext();
-            //FakeEmUp(); // seed the database with fake data from bogus. Comment out after first run.
+            FakeEmUp(); // seed the database with fake data from bogus. Comment out after first run.
             Init();
         }
 
         private void Init()
         {
-            // bloggingContext = new BloggingContext();
+            // Populate the ViewModel Blogs from the current dbContext, bloggingContext
             Blogs = new ObservableCollection<Blog>(bloggingContext.Blogs);
-            SelectedBlog = Blogs.FirstOrDefault();
+            SelectedBlog = Blogs.FirstOrDefault(); 
             var wellAreTheseTheListOfPosts = bloggingContext.Blogs.FirstOrDefault().Posts;
             Logger.Log($"Blogs: {bloggingContext.Blogs.Count()} Posts: {bloggingContext.Posts.Count()}");
             Logger.Log(this, $"In Init() is the list of posts still in the blog? ({wellAreTheseTheListOfPosts?.Count})");
-
         }
 
         public ObservableCollection<Blog> Blogs { get; set; }
         public ObservableCollection<Post> Posts { get; set; }
         public Blog SelectedBlog { get; set; }
 
-        private void FakeEmUp()
+        private void FakeEmUp() // Seed the db with some fake data using Bogus. Persist changes with SaveChanges()
         {
+            Logger.Log(this,$"You're in FakeEmUp(). Be sure to run this only once to seed the .db then comment out in MainViewModel ctor. Hope you didn't forget to run: 'Add-Migration Initial -Project EfBlogging.Uwp'\r\n");
             int saveChangesResult = 0;
             try
             {
-                var fakeBlogs = FakeBlog.Generator.Generate(4).ToList();
+                var fakeBlogs = FakeBlog.Generator.Generate(4);
                 foreach (var fakeBlog in fakeBlogs)
                 {
                     var blogsAddResult = bloggingContext.Blogs.Add(fakeBlog);
@@ -80,16 +80,17 @@ namespace EfBlogging.Uwp.ViewModel
                     Logger.Log($"fakeBlog.BlogId {fakeBlog.BlogId} fakeBlog.Posts.Count {fakeBlog.Posts.Count()}");
                     LogChangeTrackerEntities("In the foreach", bloggingContext.ChangeTracker);
                 }
-
                 saveChangesResult = bloggingContext.SaveChanges();
                 Logger.Log("FakeEmUp()", $"saveChangesResult: {saveChangesResult}");
                 LogChangeTrackerEntities("Just after SaveChanges()", bloggingContext.ChangeTracker);
             }
             catch (Exception e)
             {
+                Logger.Log("Exception thrown. If this is first run you may not have performed 'Add-Migration Initial -Project EfBlogging.Uwp'");
                 Logger.Log(this, $"Exception: {e}");
             }
 
+            // a bunch of debugging stuff I don't have the heart to delete. It does show that Blog and Post entities were created.
             var b = bloggingContext.Blogs.Count();
             var p = bloggingContext.Posts.Count();
             var s = b + p;
@@ -98,8 +99,8 @@ namespace EfBlogging.Uwp.ViewModel
             var firstBlog = bloggingContext.Blogs.FirstOrDefault();
             var posts = firstBlog.Posts;
             var wellAreTheseTheListOfPosts = bloggingContext.Blogs.FirstOrDefault().Posts;
-            var then = bloggingContext.Blogs.FirstOrDefault().Posts.FirstOrDefault().Title = "CHANGED";
-            Logger.Log(this, $"is this ({then}) the title of the first post in the first blog?");
+            //var then = bloggingContext.Blogs.FirstOrDefault().Posts.FirstOrDefault().Title = "CHANGED";
+            //Logger.Log(this, $"is this ({then}) the title of the first post in the first blog?");
             var firstBlogPostsCount = posts.Count();
             Logger.Log(this, $"number of posts in the first blog {firstBlogPostsCount}");
             var onecount = bloggingContext.SaveChanges();
@@ -110,16 +111,7 @@ namespace EfBlogging.Uwp.ViewModel
             LogChangeTrackerEntities("That's all folks", bloggingContext.ChangeTracker);
         }
 
-        private static void LogChangeTrackerEntities(string from, ChangeTracker changeTracker)
-        {
-            var entries = changeTracker.Entries();
-            foreach (var entry in entries)
-            {
-                Logger.Log($"From: {from} Entity Name: {entry.Entity.GetType().FullName} Status: {entry.State}");
-            }
-        }
-
-        public RelayCommand AddBlogCommand
+        public RelayCommand AddBlogCommand // Add an additonal blog to the db
         {
             get
             {
@@ -135,21 +127,24 @@ namespace EfBlogging.Uwp.ViewModel
 
         private void Abc()
         {
-            //var blog = FakeBlog.Generator.Generate(1);
-            //var foo = bloggingContext.Blogs;
+            // Quite a bit of code to get a single Blog with even a minimal List<Post>
+            
+            //var blog = new Blog() 
+            //{
+            //    Name = "jeffAdding",
+            //    Posts = new List<Post> {new Post
+            //    { Title = "jeffAdding", Content = "jeff is adding a blog with one post"}
+            //    }
+            //};
 
-            var blog = new Blog()
-            {
-                Name = "jeffAdding",
-                Posts = new List<Post> {new Post
-                { Title = "jeffAdding", Content = "jeff is adding a blog with one post"}
-            }
-            };
+            // Bogus gets me a Blog with all properties filled out including a List<Post> with 1 line of code
 
-
-            bloggingContext.Blogs.Add(blog);
-            var rsp = bloggingContext.SaveChanges();
+            var fakeBlog = FakeBlog.Generator.Generate(1).ToList().FirstOrDefault();
+            bloggingContext.Blogs.Add(fakeBlog);
+            var rsp = bloggingContext.SaveChanges(); 
             Logger.Log(this, $"SaveCommand() rsp: {rsp}");
+            Blogs = new ObservableCollection<Blog>(bloggingContext.Blogs); // Refresh the ItemsSource binding
+            SelectedBlog = Blogs.FirstOrDefault();
         }
 
         public string Clock
@@ -234,8 +229,6 @@ namespace EfBlogging.Uwp.ViewModel
             }
         }
 
-
-
         public void RunClock()
         {
             _runClock = true;
@@ -277,6 +270,14 @@ namespace EfBlogging.Uwp.ViewModel
             {
                 // Report error here
                 WelcomeTitle = ex.Message;
+            }
+        }
+        private static void LogChangeTrackerEntities(string from, ChangeTracker changeTracker)
+        {
+            var entries = changeTracker.Entries();
+            foreach (var entry in entries)
+            {
+                Logger.Log($"From: {from} Entity Name: {entry.Entity.GetType().FullName} Status: {entry.State}");
             }
         }
     }

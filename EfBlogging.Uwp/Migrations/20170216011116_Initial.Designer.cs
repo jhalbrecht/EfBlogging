@@ -8,7 +8,7 @@ using EfBlogging.Uwp.Model;
 namespace EfBlogging.Uwp.Migrations
 {
     [DbContext(typeof(BloggingContext))]
-    [Migration("20170213075658_Initial")]
+    [Migration("20170216011116_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

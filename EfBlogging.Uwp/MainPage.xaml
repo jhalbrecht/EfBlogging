@@ -90,22 +90,21 @@
         <RelativePanel>
 
             <StackPanel x:Name="SpBlogAndPost"
+                        Margin="50"
+                        Padding="5"
                         RelativePanel.AlignRightWithPanel="True">
 
 
-                <Button Content="Add Blog"
+                <Button Content="Add Blog (test)"
                         HorizontalAlignment="Stretch"
                         VerticalAlignment="Stretch"
-                        Margin="0,0,0,20"
-                        FontSize="24"
+                        FontSize="12"
                         Command="{Binding AddBlogCommand, Mode=OneWay}"
                         Foreground="White" />
-
+                <Rectangle Height="50" />
                 <ComboBox x:Name="CbBlogs"
-                          Margin="10"
-                          Padding="5"
                           Header="Select blog to read"
-                          ItemsSource="{Binding Blogs}"
+                          ItemsSource="{Binding Blogs, Mode=TwoWay}"
                           SelectedItem="{Binding SelectedBlog, Mode=TwoWay}">
                     <ComboBox.ItemTemplate>
                         <DataTemplate>
@@ -122,14 +121,12 @@
                         <DataTemplate>
                             <StackPanel x:Name="RpPlayItems"
                                         BorderBrush="AntiqueWhite"
-                                        BorderThickness="2"
-                                        Padding="5">
+                                      >
 
                                 <TextBlock x:Name="TbSfxNme"
                                            MinWidth="222"
                                            Text="{Binding Title}"
-                                           Style="{StaticResource BodyTextBlockStyle}" 
-                                           />
+                                           Style="{StaticResource BodyTextBlockStyle}" />
                             </StackPanel>
                         </DataTemplate>
                     </ListView.ItemTemplate>

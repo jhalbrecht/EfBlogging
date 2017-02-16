@@ -6,6 +6,8 @@ A solution with two projects demonstrating several features and Adins that I fre
 * EfBlogging.Uwp - ef and core.sqlite
 
 ##### End goal  for  projects
+The goal is to bind Blogs to a ComboBox ItemsSopurce and bind it's SelectionChanged to a view model property `SelectedBlog` that is the ItemsSource for a ListView `SelectedBlog.Post`. This is working for the wpf version using LocalDB but not the uwp version using sqlite.
+
 ![Ef Blogging Cb Lv As It Should Be](GitHubStuff/EfBloggingCbLvAsItShouldBe.JPG)
 
 ## Impetus
